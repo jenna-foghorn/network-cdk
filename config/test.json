@@ -1,24 +1,14 @@
 {
   "Project": {
-    "Name": "JupyterHubProject",
+    "Name": "NetworkingProject",
     "Stage": "Staging",
     "Region": "us-east-1",
     "Account": "111111111111"
   },
   "Stack": {
     "Template": {
-      "Name": "JupyterHubStack",
-      "desiredCount": 2,
-      "minCapacity": 1,
-      "maxCapacity": 5,
-      "minHealthyPercent": 100,
-      "cpu": 512,
-      "memory": 1024,
-      "cpuTargetPercent": 50,
-      "memoryTargetPercent": 200,
-      "useS3": true,
-      "enableRoute53": true,
-      "domainName": "jupyter.example.com"
+      "Name": "NetworkingStack",
+      "config1": "value1"
     }
   }
 }
