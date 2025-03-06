@@ -6,13 +6,13 @@ The [cdk.json](./cdk.json) file tells the CDK Toolkit how to execute your app.
 
 ## Using this repo
 
-Add stacks to `lib/` following the `template-stack.ts` example
+Add stacks to `lib/` following the [lib/template-stack.ts](./lib/template-stack.ts) example
 
 Update [bin/app.ts](./bin/app.ts) to add stacks to cdk app.
 
-Add tests to `test/` following the [lib/template-stack.ts](./lib/template-stack.ts) example to run snapshot tests of resulting cloudformation templates.
+Add tests to `test/` following the [test/template-stack.test.ts](./test/template-stack.test.ts) example to run snapshot tests of resulting cloudformation templates.
 
-Add stack configurations to `config/` following the example in `test.json`
+Add stack configurations to `config/` following the example in [config/test.json](./config/test.json)
 
 ## Useful commands
 

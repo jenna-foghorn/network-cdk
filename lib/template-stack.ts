@@ -11,5 +11,7 @@ export class TemplateStack extends base.BaseStack {
     // const queue = new sqs.Queue(this, 'Eh2IcebergQueue', {
     //   visibilityTimeout: cdk.Duration.seconds(300)
     // });
+
+    // this.exportOutput("test_key", "test_value")
   }
 }
