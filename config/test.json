@@ -6,10 +6,22 @@
     "Account": "111111111111"
   },
   "Stack": {
-    "Template": {
-      "Name": "NetworkingStack",
-      "config1": "value1"
+    "transitGateway": {
+      "name": "transitGateway",
+      "amazonSideAsn": 64512,
+      "autoAcceptSharedAttachments": "enable",
+      "defaultRouteTableAssociation": "enable",
+      "defaultRouteTablePropagation": "enable",
+      "vpnEcmpSupport": "enable",
+      "dnsSupport": "enable",
+      "multicastSupport": "disable",
+      "vpcAttachments": [
+        {
+          "name": "VpcA-Attachment",
+          "vpcId": "vpc-abc123",
+          "subnetIds": ["subnet-xyz456", "subnet-xyz789"]
+        }
+      ]
     }
   }
 }
-

@@ -1,8 +1,8 @@
 import { Template } from "aws-cdk-lib/assertions";
-import { TemplateStack } from "../lib/template-stack";
+import { TransitGatewayStack } from "../lib/transit-gateway-stack";
 import { AppContext } from "../lib/template/app-context";
 
-describe("TemplateStack", () => {
+describe("TransitGatewayStack", () => {
 
   beforeEach(() => {
     process.env["APP_CONFIG"] = "config/test.json";
@@ -13,9 +13,9 @@ describe("TemplateStack", () => {
       appConfigFileKey: "APP_CONFIG",
     });
 
-    const stack = new TemplateStack(
+    const stack = new TransitGatewayStack(
       appContext,
-      appContext.appConfig.Stack.Template,
+      appContext.appConfig.Stack.transitGateway,
     );
 
     const template = Template.fromStack(stack);
