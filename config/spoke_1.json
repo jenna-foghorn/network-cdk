@@ -1,0 +1,19 @@
+{
+  "Project": {
+    "Name": "Networking",
+    "Stage": "Staging",
+    "Region": "us-west-2",
+    "Account": "222222222222"
+  },
+  "Stack": {
+    "transitGatewayId": "tgw-1234567890abcdef",
+    "vpcAttachments": [
+      {
+        "name": "VpcB-Attachment",
+        "vpcId": "vpc-def456",
+        "subnetIds": ["subnet-mno789", "subnet-pqr123"]
+      }
+    ]
+  }
+}
+

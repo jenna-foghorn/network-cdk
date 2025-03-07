@@ -1,25 +1,33 @@
-import { Template } from "aws-cdk-lib/assertions";
+import * as cdk from "aws-cdk-lib";
+import { Template, Match } from "aws-cdk-lib/assertions";
 import { TransitGatewayStack } from "../lib/transit-gateway-stack";
 import { AppContext } from "../lib/template/app-context";
 
-describe("TransitGatewayStack", () => {
+test("TransitGatewayStack creates a Transit Gateway", () => {
+  const app = new cdk.App();
 
-  beforeEach(() => {
-    process.env["APP_CONFIG"] = "config/test.json";
+  const appContext = new AppContext({
+    appConfigFileKey: "config/test.json",
   });
 
-  test("matches the snapshot", () => {
-    const appContext = new AppContext({
-      appConfigFileKey: "APP_CONFIG",
-    });
+  const stackConfig = appContext.appConfig.Stack.transitGateway;
 
-    const stack = new TransitGatewayStack(
-      appContext,
-      appContext.appConfig.Stack.transitGateway,
-    );
+  const stack = new TransitGatewayStack(appContext, stackConfig);
 
-    const template = Template.fromStack(stack);
-    expect(template.toJSON()).toMatchSnapshot();
+  const template = Template.fromStack(stack);
+
+  // Validate only that required properties exist
+  template.hasResourceProperties("AWS::EC2::TransitGateway", {
+    AmazonSideAsn: Match.anyValue(),
+    AutoAcceptSharedAttachments: Match.anyValue(),
+    DefaultRouteTableAssociation: Match.anyValue(),
+    DefaultRouteTablePropagation: Match.anyValue(),
+    VpnEcmpSupport: Match.anyValue(),
+    DnsSupport: Match.anyValue(),
+    MulticastSupport: Match.anyValue(),
   });
 
+  template.hasOutput("TransitGatewayId", {});
+
+  expect(template.toJSON()).toMatchSnapshot();
 });

@@ -1,35 +1,28 @@
-#!/usr/bin/env node
 import "source-map-support/register";
+import * as cdk from "aws-cdk-lib";
 import { AppContext } from "../lib/template/app-context";
 import { TransitGatewayStack } from "../lib/transit-gateway-stack";
+import { AcceptTransitGatewayStack } from "../lib/accept-transit-gateway-stack";
 
-const appContext = new AppContext({
-  appConfigFileKey: "APP_CONFIG",
-});
+const app = new cdk.App();
 
-// Deploy Stack
-new TransitGatewayStack(appContext, appContext.appConfig.Stack.transitGateway);
+// Ensure APP_CONFIG is set
+process.env["APP_CONFIG"] = process.env["APP_CONFIG"] || "config/hub.json";
 
-// // improves error stack traces when running CDK
-// import "source-map-support/register";
-// import { AppContext } from "../lib/template/app-context";
-// import { TransitGatewayStack } from "../lib/transit-gateway-stack";
-// import { AcceptTransitGatewayStack } from "../lib/accept-transit-gateway-stack";
+// Load configuration
+const appContext = new AppContext({ appConfigFileKey: "APP_CONFIG" });
+const stackConfig = appContext.appConfig.Stack;
 
-// // const app = new cdk.App();
+// Validate config
+if (!stackConfig) {
+  throw new Error("Invalid configuration: Stack section missing in config.");
+}
 
-// // Get the target environment from a CLI argument or env variable
-// const envName = process.env.APP_ENV || "hub"; // Default to hub
-// const configFile = `config/${envName}.json`;
-
-// const appContext = new AppContext({
-//   appConfigFileKey: configFile,
-// });
-
-// if (envName === "hub") {
-//   new TransitGatewayStack(appContext, appContext.config);
-// } else {
-//   new AcceptTransitGatewayStack(appContext, appContext.config);
-// }
-
-
+// Determine which stack to deploy
+if (stackConfig.transitGateway) {
+  new TransitGatewayStack(appContext, stackConfig.transitGateway);
+} else if (stackConfig.transitGatewayId) {
+  new AcceptTransitGatewayStack(appContext, stackConfig);
+} else {
+  throw new Error("Invalid Stack configuration. No Transit Gateway or Attachments found.");
+}

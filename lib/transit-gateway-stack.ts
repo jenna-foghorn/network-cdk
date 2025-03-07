@@ -1,4 +1,4 @@
-import * as base from "./template/stack/base-stack";
+import * as base from "../lib/template/stack/base-stack";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 import { AppContext } from "../lib/template/app-context";
@@ -7,10 +7,9 @@ export class TransitGatewayStack extends base.BaseStack {
   constructor(appContext: AppContext, stackConfig: any) {
     super(appContext, stackConfig);
 
-    // Extract transit gateway configuration from stackConfig
     const transitGatewayConfig = stackConfig.transitGateway || {};
 
-    // Define the Transit Gateway
+    // Create the Transit Gateway
     const transitGateway = new ec2.CfnTransitGateway(this, "TransitGateway", {
       amazonSideAsn: transitGatewayConfig.amazonSideAsn || 64512,
       autoAcceptSharedAttachments: transitGatewayConfig.autoAcceptSharedAttachments || "enable",
@@ -22,21 +21,19 @@ export class TransitGatewayStack extends base.BaseStack {
       tags: [{ key: "Name", value: transitGatewayConfig.name || "TransitGateway" }],
     });
 
-    // Use BaseStack's exportOutput method (if available)
     this.exportOutput("TransitGatewayId", transitGateway.ref);
 
-    // Create VPC Attachments if defined in stackConfig
-    if (transitGatewayConfig.vpcAttachments) {
+    // Attach VPCs in the same account as the Transit Gateway
+    if (transitGatewayConfig.vpcAttachments && transitGatewayConfig.vpcAttachments.length > 0) {
       transitGatewayConfig.vpcAttachments.forEach((vpc: any, index: number) => {
-        const attachment = new ec2.CfnTransitGatewayAttachment(this, `VpcAttachment${index}`, {
-          subnetIds: vpc.subnetIds,
+        new ec2.CfnTransitGatewayAttachment(this, `VpcAttachment${index}`, {
           transitGatewayId: transitGateway.ref,
           vpcId: vpc.vpcId,
+          subnetIds: vpc.subnetIds,
           tags: [{ key: "Name", value: vpc.name }],
         });
 
-        // Use BaseStack's exportOutput method for VPC Attachments
-        this.exportOutput(`VpcAttachment${index}Id`, attachment.ref);
+        this.exportOutput(`VpcAttachment${index}Id`, vpc.vpcId);
       });
     }
   }
