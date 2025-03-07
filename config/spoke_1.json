@@ -11,9 +11,9 @@
       {
         "name": "VpcB-Attachment",
         "vpcId": "vpc-def456",
-        "subnetIds": ["subnet-mno789", "subnet-pqr123"]
+        "subnetIds": ["subnet-mno789", "subnet-pqr123"],
+        "propagateToRouteTable": "HubRouteTable"
       }
     ]
   }
 }
-

@@ -17,15 +17,23 @@ export class AcceptTransitGatewayStack extends base.BaseStack {
       throw new Error("No VPC attachments specified.");
     }
 
-    stackConfig.vpcAttachments.forEach((vpc: any, index: number) => {
-      new ec2.CfnTransitGatewayAttachment(this, `VpcAttachment${index}`, {
+    stackConfig.vpcAttachments.forEach((vpc: any, index: any) => {
+      const attachment = new ec2.CfnTransitGatewayAttachment(this, `VpcAttachment${index}`, {
         transitGatewayId,
         vpcId: vpc.vpcId,
         subnetIds: vpc.subnetIds,
         tags: [{ key: "Name", value: vpc.name }],
       });
 
-      this.exportOutput(`VpcAttachment${index}Id`, transitGatewayId);
+      this.exportOutput(`VpcAttachment${index}Id`, attachment.ref);
+
+      // Propagate routes to the specified Route Table
+      if (vpc.propagateToRouteTable) {
+        new ec2.CfnTransitGatewayRouteTablePropagation(this, `VpcAttachment${index}RouteTablePropagation`, {
+          transitGatewayAttachmentId: attachment.ref,
+          transitGatewayRouteTableId: vpc.propagateToRouteTable,
+        });
+      }
     });
   }
 }

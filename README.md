@@ -211,12 +211,48 @@ The [cdk.json](./cdk.json) file tells the CDK Toolkit how to execute your app.
 
 ## Configuration
 
-### Hub Account
+### For Hub Account
 
 Defines the Transit Gateway and its VPC Attachments, and uses [config/hub.json](./config/hub.json) for configuration.
 
 
-### Spoke Account(s)
+#### hub.json, the settings:
+
+```sh
+"defaultRouteTableAssociation": "enable",
+"defaultRouteTablePropagation": "enable"
+```
+
+What Do These Settings Do?
+`defaultRouteTableAssociation` (`enable` or `disable`):
+- If `enable`, any new VPC attachment will be automatically associated with the default route table of the Transit Gateway.
+- If `disable`, manual associations are required for every VPC attachment.
+
+`defaultRouteTablePropagation` (`enable` or `disable`):
+- If `enable`, routes from attached VPCs are automatically propagated to the default route table.
+- If `disable`, manual route propagation is required.
+
+Are These Settings Enough?
+These only affect the default route table. If you create custom route tables, you must manually associate and propagate routes.
+
+When Should You Override This?
+- If all VPCs should be associated with the same route table → Leave it as enable.
+- If you want different route tables for different VPCs → Set to disable and use explicit CfnTransitGatewayRouteTableAssociation.
+
+What Happens If We Disable These?
+If we change:
+```sh
+"defaultRouteTableAssociation": "disable",
+"defaultRouteTablePropagation": "disable"
+```
+- Every VPC attachment must explicitly associate with a route table.
+- Every VPC must explicitly propagate its routes.
+
+
+
+
+
+### For Spoke Account(s)
 
 Defines the VPC Attachments in a Spoke AWS Account, and uses [config/spoke_1.json](./config/spoke_1.json) for configuration.
 
@@ -242,6 +278,13 @@ npm run build
 APP_CONFIG=config/hub.json npx cdk deploy TransitGatewayStack
 ```
 
+Expected Outputs:
+```sh
+TransitGatewayId: tgw-1234567890abcdef
+HubRouteTableId: tgw-rtb-abcdef123456
+VpcAttachment0Id: vpc-abc123
+```
+
 #### Locating the Transit Gateway ID
 ```sh
 aws cloudformation describe-stacks --stack-name TransitGatewayStack --query "Stacks[0].Outputs[?OutputKey=='TransitGatewayId'].OutputValue" --output text
@@ -250,7 +293,7 @@ aws cloudformation describe-stacks --stack-name TransitGatewayStack --query "Sta
 Copy the `TransitGatewayID` and update [config/spoke_1.json](./config/spoke_1.json)
 
 
-### Deploy the Spoke Account (Attaches VPC to Transit Gateway)
+### Deploy the Spoke Account (Attaches VPCs to Transit Gateway)
 
 ```sh
 APP_CONFIG=config/spoke_1.json npx cdk deploy AcceptTransitGatewayStack
@@ -282,7 +325,7 @@ npx cdk destroy
 | Issue                                   | Cause                         | Solution                                                     |
 | --------------------------------------- | ----------------------------- | ------------------------------------------------------------ |
 | CDK deployment fails                    | `APP_CONFIG` is not set       | Ensure you run `APP_CONFIG=config/hub.json npx cdk deploy`   |
-| Transit Gateway Attachments not showing | Incorrect VPC/subnet IDs      | Check `config/spoke_1.json` and update `vpcId` & `subnetIds` |
+| Transit Gateway Attachments not showing | Incorrect VPC/subnet IDs      | Check [config/spoke_1.json](./config/spoke_1.json) and update `vpcId` & `subnetIds` |
 | Networking issues                       | Route propagation not enabled | Verify route tables are properly configured                  |
 
 ## Debugging CloudFormation Errors

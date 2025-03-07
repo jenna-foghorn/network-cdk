@@ -19,10 +19,16 @@
         {
           "name": "VpcA-Attachment",
           "vpcId": "vpc-abc123",
-          "subnetIds": ["subnet-xyz456", "subnet-xyz789"]
+          "subnetIds": ["subnet-xyz456", "subnet-xyz789"],
+          "associateWithRouteTable": true
         }
       ],
-      "sharedWithAccounts": ["222222222222"]
+      "routeTables": [
+        {
+          "name": "HubRouteTable"
+        }
+      ],
+      "sharedWithAccounts": ["222222222222", "333333333333"]
     }
   }
 }
