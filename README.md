@@ -1,8 +1,25 @@
-# AWS Networking CDK Project- Transit Gateway Hub & Spoke
+# AWS Networking CDK Project - Transit Gateway Hub & Spoke
 
 This repository provides an **AWS CDK TypeScript** implementation to deploy networking resources using a **Transit Gateway Hub & Spoke architecture**.
 
 The [cdk.json](./cdk.json) file tells the CDK Toolkit how to execute your app.
+
+
+## Accepting Transit Gateway Resource Share(s) (One-time Setup)
+
+> Important: You cannot accept RAM resource shares directly via CloudFormation/CDK today. This is a known limitation of AWS' resource modeling in CDK and CloudFormation.
+
+Before deploying Spoke VPC Attachments, ensure the Transit Gateway shared by the Hub account has been accepted:
+
+If using AWS Organizations, and `allowExternalPrincipals` is `false`, acceptance may be automatic.
+
+To accept manually:
+
+```bash
+aws ram accept-resource-share-invitation \
+  --resource-share-invitation-arn <RESOURCE_SHARE_INVITATION_ARN>
+```
+
 
 ## Using This Repository
 

@@ -22,27 +22,49 @@ export class TransitGatewayStack extends base.BaseStack {
 
     this.exportOutput("TransitGatewayId", transitGateway.ref);
 
-    if (transitGatewayConfig.sharedWithAccounts?.length) {
-      new ram.CfnResourceShare(this, "TransitGatewayResourceShare", {
+    // // Creating a Resource Share in AWS Resource Access Manager
+    // if (transitGatewayConfig.sharedWithAccounts?.length) {
+    //   new ram.CfnResourceShare(this, "TransitGatewayResourceShare", {
+    //     name: "TransitGatewayShare",
+    //     allowExternalPrincipals: false, // or true depending on your sharing policy
+    //     principals: transitGatewayConfig.sharedWithAccounts,
+    //     resourceArns: [`arn:aws:ec2:${this.region}:${this.account}:transit-gateway/${transitGateway.ref}`],
+    //     tags: [{ key: "Name", value: "TransitGatewayShare" }],
+    //   });
+    // }
+
+    // Share TransitGateway with other AWS accounts by Creating a Resource Share in AWS Resource Access Manager
+    let resourceShare: ram.CfnResourceShare | undefined = undefined;
+
+    if (transitGatewayConfig.sharedWithAccounts && transitGatewayConfig.sharedWithAccounts.length > 0) {
+      resourceShare = new ram.CfnResourceShare(this, "TransitGatewayResourceShare", {
         name: "TransitGatewayShare",
-        allowExternalPrincipals: false,
+        allowExternalPrincipals: false, // or true depending on your sharing policy
         principals: transitGatewayConfig.sharedWithAccounts,
-        resourceArns: [`arn:aws:ec2:${this.region}:${this.account}:transit-gateway/${transitGateway.ref}`],
+        resourceArns: [
+          `arn:aws:ec2:${this.region}:${this.account}:transit-gateway/${transitGateway.ref}`,
+        ],
+        tags: [{ key: "Name", value: "TransitGatewayShare" }],
       });
+
+      // Export the RAM Resource Share ARN for use in other accounts
+      this.exportOutput("TransitGatewayResourceShareArn", resourceShare.attrArn);
     }
 
-    const routeTables: { [key: string]: ec2.CfnTransitGatewayRouteTable } = {};
 
-    if (transitGatewayConfig.routeTables) {
-      transitGatewayConfig.routeTables.forEach((rt: any) => {
-        const routeTable = new ec2.CfnTransitGatewayRouteTable(this, rt.name, {
-          transitGatewayId: transitGateway.ref,
-          tags: [{ key: "Name", value: rt.name }],
-        });
-        routeTables[rt.name] = routeTable;
-        this.exportOutput(`${rt.name}Id`, routeTable.ref);
-      });
-    }
+
+    // const routeTables: { [key: string]: ec2.CfnTransitGatewayRouteTable } = {};
+
+    // if (transitGatewayConfig.routeTables) {
+    //   transitGatewayConfig.routeTables.forEach((rt: any) => {
+    //     const routeTable = new ec2.CfnTransitGatewayRouteTable(this, rt.name, {
+    //       transitGatewayId: transitGateway.ref,
+    //       tags: [{ key: "Name", value: rt.name }],
+    //     });
+    //     routeTables[rt.name] = routeTable;
+    //     this.exportOutput(`${rt.name}Id`, routeTable.ref);
+    //   });
+    // }
 
     transitGatewayConfig.vpcAttachments?.forEach((vpc: any, index: any) => {
       const attachment = new ec2.CfnTransitGatewayAttachment(this, `VpcAttachment${index}`, {
@@ -54,12 +76,12 @@ export class TransitGatewayStack extends base.BaseStack {
 
       this.exportOutput(`VpcAttachment${index}Id`, attachment.ref);
 
-      if (vpc.associateWithRouteTable && transitGatewayConfig.routeTables?.length) {
-        new ec2.CfnTransitGatewayRouteTableAssociation(this, `VpcAttachment${index}Association`, {
-          transitGatewayAttachmentId: attachment.ref,
-          transitGatewayRouteTableId: routeTables["HubRouteTable"].ref,
-        });
-      }
+      // if (vpc.associateWithRouteTable && transitGatewayConfig.routeTables?.length) {
+      //   new ec2.CfnTransitGatewayRouteTableAssociation(this, `VpcAttachment${index}Association`, {
+      //     transitGatewayAttachmentId: attachment.ref,
+      //     transitGatewayRouteTableId: routeTables["HubRouteTable"].ref,
+      //   });
+      // }
     });
   }
 }

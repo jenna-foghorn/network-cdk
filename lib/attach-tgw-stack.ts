@@ -6,6 +6,8 @@ export class AttachTransitGatewayStack extends base.BaseStack {
   constructor(appContext: AppContext, stackConfig: any) {
     super(appContext, stackConfig);
 
+    // Important: You cannot accept RAM resource shares directly via CloudFormation/CDK today. This is a known limitation of AWS' resource modeling in CDK and CloudFormation.
+
     if (!stackConfig.transitGatewayId) throw new Error("Missing 'transitGatewayId'.");
 
     const transitGatewayId = stackConfig.transitGatewayId;
@@ -20,12 +22,12 @@ export class AttachTransitGatewayStack extends base.BaseStack {
 
       this.exportOutput(`VpcAttachment${index}Id`, attachment.ref);
 
-      if (vpc.propagateToRouteTable) {
-        new ec2.CfnTransitGatewayRouteTablePropagation(this, `VpcAttachment${index}Propagation`, {
-          transitGatewayAttachmentId: attachment.ref,
-          transitGatewayRouteTableId: vpc.propagateToRouteTable,
-        });
-      }
+      // if (vpc.propagateToRouteTable) {
+      //   new ec2.CfnTransitGatewayRouteTablePropagation(this, `VpcAttachment${index}Propagation`, {
+      //     transitGatewayAttachmentId: attachment.ref,
+      //     transitGatewayRouteTableId: vpc.propagateToRouteTable,
+      //   });
+      // }
     });
   }
 }
