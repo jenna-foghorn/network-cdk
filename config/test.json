@@ -2,6 +2,7 @@
   "Project": {
     "Name": "Networking",
     "Stage": "Testing",
+    "Product": "APM",
     "Region": "us-east-1",
     "Account": "111111111111"
   },

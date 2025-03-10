@@ -87,20 +87,6 @@ If we change:
 Defines the VPC Attachments in a Spoke Account. Spoke configuration example: [config/spoke_1.json](./config/spoke_1.json)
 
 
-
-
-## bootstrap CDK project
-
-### Install Requirements
-```
-brew install nvm        // follow the instructions for inserting stuff into your ~/.bash_profile
-source ~/.bash_profile
-nvm install 22.0.0
-brew install eslint     // may not be needed for CDK but needed to run npm run lint
-npm install -g aws-cdk
-npm install aws-cdk-lib constructs
-```
-
 ## Deployments
 
 ### View Stacks
@@ -199,6 +185,7 @@ nvm install 22.0.0
 brew install eslint // may not be needed for CDK but needed to run npm run lint
 npm install -g aws-cdk
 npm install aws-cdk-lib constructs
+npm install eslint // test which installation works
 ```
 
 ### Setup local AWS credentials

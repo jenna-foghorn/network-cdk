@@ -1,23 +1,16 @@
 import * as base from "../lib/template/stack/base-stack";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import { Construct } from "constructs";
 import { AppContext } from "../lib/template/app-context";
 
-export class AcceptTransitGatewayStack extends base.BaseStack {
+export class AttachTransitGatewayStack extends base.BaseStack {
   constructor(appContext: AppContext, stackConfig: any) {
     super(appContext, stackConfig);
 
-    if (!stackConfig.transitGatewayId) {
-      throw new Error("Missing required parameter: transitGatewayId.");
-    }
+    if (!stackConfig.transitGatewayId) throw new Error("Missing 'transitGatewayId'.");
 
     const transitGatewayId = stackConfig.transitGatewayId;
 
-    if (!stackConfig.vpcAttachments || stackConfig.vpcAttachments.length === 0) {
-      throw new Error("No VPC attachments specified.");
-    }
-
-    stackConfig.vpcAttachments.forEach((vpc: any, index: any) => {
+    stackConfig.vpcAttachments?.forEach((vpc: any, index: any) => {
       const attachment = new ec2.CfnTransitGatewayAttachment(this, `VpcAttachment${index}`, {
         transitGatewayId,
         vpcId: vpc.vpcId,
@@ -27,9 +20,8 @@ export class AcceptTransitGatewayStack extends base.BaseStack {
 
       this.exportOutput(`VpcAttachment${index}Id`, attachment.ref);
 
-      // Propagate routes to the specified Route Table
       if (vpc.propagateToRouteTable) {
-        new ec2.CfnTransitGatewayRouteTablePropagation(this, `VpcAttachment${index}RouteTablePropagation`, {
+        new ec2.CfnTransitGatewayRouteTablePropagation(this, `VpcAttachment${index}Propagation`, {
           transitGatewayAttachmentId: attachment.ref,
           transitGatewayRouteTableId: vpc.propagateToRouteTable,
         });

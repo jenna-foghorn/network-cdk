@@ -2,11 +2,13 @@
   "Project": {
     "Name": "Networking",
     "Stage": "Staging",
+    "Product": "APM",
     "Region": "us-east-1",
     "Account": "111111111111"
   },
   "Stack": {
     "transitGateway": {
+      "Name": "transitGateway",
       "name": "transitGateway",
       "amazonSideAsn": 64512,
       "autoAcceptSharedAttachments": "enable",

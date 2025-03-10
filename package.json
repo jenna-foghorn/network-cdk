@@ -23,7 +23,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.2",
     "aws-cdk": "2.147.1",
-    "eslint": "^9.10.0",
+    "eslint": "^9.22.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.5",
@@ -35,8 +35,8 @@
     "typescript-eslint": "^8.5.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.147.1",
-    "constructs": "^10.0.0",
+    "aws-cdk-lib": "^2.147.1",
+    "constructs": "^10.4.2",
     "env-var": "^7.5.0",
     "source-map-support": "^0.5.21"
   }
