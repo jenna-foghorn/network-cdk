@@ -1,174 +1,6 @@
-# Welcome to your Networking CDK TypeScript project
+# AWS Networking CDK Project- Transit Gateway Hub & Spoke
 
-This repository provides an **AWS CDK TypeScript** implementation to deploy **Networking**.
-
-The [cdk.json](./cdk.json) file tells the CDK Toolkit how to execute your app.
-
-## Using this repo
-
-Add stacks to `lib/` following the [lib/template-stack.ts](./lib/template-stack.ts) example
-
-Update [bin/app.ts](./bin/app.ts) to add stacks to cdk app.
-
-Add tests to `test/` following the [test/template-stack.test.ts](./test/template-stack.test.ts) example to run snapshot tests of resulting cloudformation templates.
-
-Add stack configurations to `config/` following the example in [config/test.json](./config/test.json)
-
-## Useful commands
-
-- `npm run build` compile typescript to js
-- `npm run watch` watch for changes and compile
-- `npm run test` perform the jest unit tests
-- `npm run test -- -u` update test snapshots
-- `npx cdk deploy` deploy this stack to your default AWS account/region
-- `npx cdk diff` compare deployed stack with current state
-- `npx cdk synth` emits the synthesized CloudFormation template
-- `npm run lint` lint code
-- `npm run lint:fix` lint and fix code
-- `npm run commitlint` Lint last commit message
-
-
-## Features
-
-- Transit Gateway Hub and spoke
-
-
-## :file_folder: Project Structure
-
-| File | Description |
-|------|-------------|
-| [bin/app.ts](./bin/app.ts)                                                            | Main CDK entry point |
-| [lib/template-stack.ts](./lib/template-stack.ts)                                      | Template stack (Networking Stack) |
-| [lib/template/app-context.ts](./lib/template/app-context.ts)                          | Handles config loading |
-| [lib/template/app-donfig.ts](./lib/template/app-donfig.ts)                            | Defines project-wide settings |
-| [lib/template/common/common-guardian.ts](./lib/template/common/common-guardian.ts)    | Handles S3 bucket creation |
-| [lib/template/common/common-helper.ts](./lib/template/common/common-helper.ts)        | Handles parameter storage and naming |
-| [lib/template/stack/base-stack.ts](./lib/template/stack/base-stack.ts)                | Base stack with standard functionality |
-| [test/template-stack.test.ts](./test/template-stack.test.ts)                          | Unit tests |
-| [config/test.json](./config/test.json)                                                | Project-specific configurations |
-| [cdk.json](./cdk.json)                                                                | CDK configuration |
-| [package.json](./package.json)                                                        | Node.js dependencies |
-| [tsconfig.json](./tsconfig.json)                                                      | TypeScript configuration |
-| [README.md](./README.md)                                                              | Project documentation  |
-
-
-
-## :gear: Configuration
-
-Modify [config/test.json](./config/test.json) to customize the deployment:
-
-```json
-{
-  "Project": {
-    "Name": "NetworkingProject",
-    "Stage": "Staging",
-    "Product": "APM",
-    "Account": "111111111111",
-    "Region": "us-east-1"
-  },
-  "Stack": {
-    "Template": {
-      "Name": "NetworkingStack"
-    }
-  }
-}
-```
-
-Describes [config/test.json](./config/test.json) settings:
-| Configuration | Description |
-|---------------|-------------|
-|  |  |
-
-
-## Deployment Steps
-
-### 1. Initialize AWS CDK Project
-```sh
-cd networking # GitHub repo name
-cdk init app --language typescript
-```
-
-### 2. Install Dependencies
-Run the following to install dependencies:
-```sh
-npm install
-```
-
-### 3. Build the CDK Project
-```sh
-npm run build
-```
-
-### 4. Synthesize CloudFormation Template
-```sh
-npx cdk synth
-```
-
-### 5. Deploy the Stack
-```sh
-npx cdk deploy
-```
-
-### 6.  After deployment, outputs will display:
--
--
-
-
-## :arrows_counterclockwise: Updating the Stack
-
-If you modify [config/test.json](./config/test.json), **rebuild & redeploy**:
-```sh
-npm run build
-npx cdk deploy
-```
-
-
-## Running Tests
-
-Ensure all resources are correctly provisioned:
-```sh
-npm run test
-```
-
-This runs unit tests that verify:
-- **CloudFormation template snapshots** remain unchanged.
-
-## :x: Destroying the Stack
-
-To remove all AWS resources:
-```sh
-npx cdk destroy
-```
-
-
-
-## :construction: Troubleshooting
-
-Common Issues & How to Fix Them.
-
-| Issue | Cause | Solution |
-|-------|-------|----------|
-|  |  |  |
-
-
-
-
-### 1. Debugging CloudFormation Errors
-
-To inspect the generated CloudFormation template:
-```sh
-npx cdk synth
-```
-To view CloudFormation logs:
-```sh
-aws cloudformation describe-stacks --stack-name NetworkingStack
-```
----
-
-
-# AWS Networking CDK - Transit Gateway Hub & Spoke
-
-This repository provides an AWS CDK TypeScript implementation to deploy networking resources using a Transit Gateway Hub & Spoke architecture.
+This repository provides an **AWS CDK TypeScript** implementation to deploy networking resources using a **Transit Gateway Hub & Spoke architecture**.
 
 The [cdk.json](./cdk.json) file tells the CDK Toolkit how to execute your app.
 
@@ -237,7 +69,7 @@ These only affect the default route table. If you create custom route tables, yo
 
 When Should You Override This?
 - If all VPCs should be associated with the same route table → Leave it as enable.
-- If you want different route tables for different VPCs → Set to disable and use explicit CfnTransitGatewayRouteTableAssociation.
+- If you want different route tables for different VPCs → Set to disable and use explicit `CfnTransitGatewayRouteTableAssociation`.
 
 What Happens If We Disable These?
 If we change:
@@ -250,26 +82,45 @@ If we change:
 
 
 
-
-
 ### For Spoke Account(s)
 
-Defines the VPC Attachments in a Spoke AWS Account, and uses [config/spoke_1.json](./config/spoke_1.json) for configuration.
+Defines the VPC Attachments in a Spoke Account. Spoke configuration example: [config/spoke_1.json](./config/spoke_1.json)
 
 
 
-## Deployment Steps
 
-### Install Dependencies
+## bootstrap CDK project
+
+### Install Requirements
+```
+brew install nvm        // follow the instructions for inserting stuff into your ~/.bash_profile
+source ~/.bash_profile
+nvm install 22.0.0
+brew install eslint     // may not be needed for CDK but needed to run npm run lint
+npm install -g aws-cdk
+npm install aws-cdk-lib constructs
+```
+
+## Deployments
+
+### View Stacks
 
 ```sh
-npm install
+npx cdk ls
 ```
 
 ### Build the CDK Project
 
+> requires stack_name?
 ```sh
 npm run build
+```
+
+### Run Tests
+
+> requires stack_name?
+```sh
+npm run test
 ```
 
 ### Deploy the Hub Account (Creates Transit Gateway)
@@ -299,14 +150,10 @@ Copy the `TransitGatewayID` and update [config/spoke_1.json](./config/spoke_1.js
 APP_CONFIG=config/spoke_1.json npx cdk deploy AcceptTransitGatewayStack
 ```
 
-## Updating the Stack
+## Updating Stack(s)
 
-If you modify [config/hub.json](./config/hub.json) or [config/spoke_1.json](./config/spoke_1.json), rebuild and redeploy:
+If you modify [config/hub.json](./config/hub.json) or [config/spoke_1.json](./config/spoke_1.json), rebuild and redeploy.
 
-```sh
-npm run build
-npx cdk deploy
-```
 
 ## Running Tests
 
@@ -340,3 +187,81 @@ View CloudFormation logs:
 ```sh
 aws cloudformation describe-stacks --stack-name TransitGatewayStack
 ```
+
+
+## bootstrap CDK project
+
+### Install requirements
+```
+brew install nvm // follow the instructions for inserting stuff into your ~/.bash_profile
+source ~/.bash_profile
+nvm install 22.0.0
+brew install eslint // may not be needed for CDK but needed to run npm run lint
+npm install -g aws-cdk
+npm install aws-cdk-lib constructs
+```
+
+### Setup local AWS credentials
+- setup local AWS credentials
+- grab credentials from AWS console and stick into ~/.aws/credentials under a profile
+```
+[eh-InfraDeveloperStaging]
+aws_access_key_id=XXXXXXX
+aws_secret_access_key=XXXXXX
+aws_session_token=XXXXXX
+```
+- create that profile name in ~/.aws/config
+```
+[profile eh-InfraDeveloperStaging]
+output = json
+region = us-west-2
+```
+
+### define APP_CONFIG
+```
+export set APP_CONFIG=config/test.json
+```
+
+### give it a try
+```
+npx cdk diff --profile eh-InfraDeveloperStaging
+==> CDK App-Config File is config/test.json, which is from Environment-Variable.
+{
+  Project: {
+    Name: 'ProjectName',
+    Stage: 'Staging',
+    Product: 'APM',
+    Account: '471112773706',
+    Region: 'us-west-2'
+  },
+  Stack: {
+    Template: { Name: 'TemplateStack', Config1: 'Value1', Config2: 'Value2' }
+  }
+}
+Stack ProjectNameStaging-TemplateStack
+current credentials could not be used to assume 'arn:aws:iam::471112773706:role/cdk-hnb659fds-lookup-role-471112773706-us-west-2', but are for the right account. Proceeding anyway.
+Lookup role exists but was not assumed. Proceeding with default credentials.
+current credentials could not be used to assume 'arn:aws:iam::471112773706:role/cdk-hnb659fds-deploy-role-471112773706-us-west-2', but are for the right account. Proceeding anyway.
+Lookup role exists but was not assumed. Proceeding with default credentials.
+Parameters
+[+] Parameter BootstrapVersion BootstrapVersion: {"Type":"AWS::SSM::Parameter::Value<String>","Default":"/cdk-bootstrap/hnb659fds/version","Description":"Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"}
+
+Other Changes
+[+] Unknown Rules: {"CheckBootstrapVersion":{"Assertions":[{"Assert":{"Fn::Not":[{"Fn::Contains":[["1","2","3","4","5"],{"Ref":"BootstrapVersion"}]}]},"AssertDescription":"CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."}]}}
+
+
+✨  Number of stacks with differences: 1
+```
+
+## Useful commands
+
+- `npm run build` compile typescript to js
+- `npm run watch` watch for changes and compile
+- `npm run test` perform the jest unit tests
+- `npm run test -- -u` update test snapshots
+- `npx cdk deploy` deploy this stack to your default AWS account/region
+- `npx cdk diff` compare deployed stack with current state
+- `npx cdk synth` emits the synthesized CloudFormation template
+- `npm run lint` lint code
+- `npm run lint:fix` lint and fix code
+- `npm run commitlint` Lint last commit message
