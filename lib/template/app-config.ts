@@ -36,4 +36,3 @@ export interface AppConfig {
   Global: any;
   Stack: StackConfig;
 }
-

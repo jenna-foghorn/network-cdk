@@ -1,5 +1,68 @@
 {
-  "acknowledged-issue-numbers": [
-    32775
-  ]
+  "acknowledged-issue-numbers": [32775],
+  "availability-zones:account=471112773706:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ],
+  "vpc-provider:account=471112773706:filter.vpc-id=vpc-0321af1a8664fc2df:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0321af1a8664fc2df",
+    "vpcCidrBlock": "172.20.0.0/16",
+    "ownerAccountId": "471112773706",
+    "availabilityZones": [],
+    "vpnGatewayId": "vgw-071a757f615c38399",
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0736ab27edac9146e",
+            "cidr": "172.20.96.0/20",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-03dfc0d300c5b4824"
+          },
+          {
+            "subnetId": "subnet-09f27104709fbf563",
+            "cidr": "172.20.112.0/20",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-03dfc0d300c5b4824"
+          },
+          {
+            "subnetId": "subnet-071352afa15670a5f",
+            "cidr": "172.20.0.0/20",
+            "availabilityZone": "us-east-1c",
+            "routeTableId": "rtb-03dfc0d300c5b4824"
+          }
+        ]
+      },
+      {
+        "name": "Private",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-033fbd5cf3b994303",
+            "cidr": "172.20.64.0/20",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0e4a92c039076d9bb"
+          },
+          {
+            "subnetId": "subnet-0bc03757a24b783f7",
+            "cidr": "172.20.32.0/20",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-099bd0d0b206f9715"
+          },
+          {
+            "subnetId": "subnet-08e671ff1e850f6fe",
+            "cidr": "172.20.80.0/20",
+            "availabilityZone": "us-east-1c",
+            "routeTableId": "rtb-0ed58fd59d700c673"
+          }
+        ]
+      }
+    ]
+  }
 }

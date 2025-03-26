@@ -79,4 +79,3 @@ export class CommonGuardian implements ICommonGuardian {
     return s3Bucket;
   }
 }
-

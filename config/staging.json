@@ -1,0 +1,16 @@
+{
+  "Project": {
+    "Name": "Network",
+    "Stage": "Staging",
+    "Product": "Infra",
+    "Region": "us-east-1",
+    "Account": "471112773706"
+  },
+  "Stack": {
+    "vpc": {
+      "Name": "StagingVpc",
+      "useExistingVpc": true,
+      "vpcId": "vpc-0321af1a8664fc2df"
+    }
+  }
+}

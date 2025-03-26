@@ -164,4 +164,3 @@ export class CommonHelper implements ICommonHelper {
     return `${this.projectPrefix}${delimiter}${baseName}`;
   }
 }
-
