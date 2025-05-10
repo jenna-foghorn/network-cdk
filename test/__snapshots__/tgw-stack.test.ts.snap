@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TransitGatewayStack matches the snapshot if configured 1`] = `
+{
+  "Outputs": {
+    "OutputTransitGatewayId": {
+      "Export": {
+        "Name": "NetworkNetworking-TransitGatewayId",
+      },
+      "Value": {
+        "Ref": "TransitGateway",
+      },
+    },
+    "OutputTransitGatewayResourceShareArn": {
+      "Export": {
+        "Name": "NetworkNetworking-TransitGatewayResourceShareArn",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "TransitGatewayResourceShare",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "TransitGateway": {
+      "Properties": {
+        "AmazonSideAsn": 64512,
+        "AutoAcceptSharedAttachments": "enable",
+        "DefaultRouteTableAssociation": "enable",
+        "DefaultRouteTablePropagation": "enable",
+        "DnsSupport": "enable",
+        "MulticastSupport": "disable",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NetworkNetworking-TransitGatewayStack",
+          },
+          {
+            "Key": "Product",
+            "Value": "Infra",
+          },
+          {
+            "Key": "StackName",
+            "Value": "NetworkNetworking-TransitGatewayStack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "Networking",
+          },
+        ],
+        "VpnEcmpSupport": "enable",
+      },
+      "Type": "AWS::EC2::TransitGateway",
+    },
+    "TransitGatewayResourceShare": {
+      "Properties": {
+        "AllowExternalPrincipals": false,
+        "Name": "TransitGatewayShare",
+        "Principals": [
+          "471112773706",
+        ],
+        "ResourceArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:ec2:us-east-1:179783686247:transit-gateway/",
+                {
+                  "Ref": "TransitGateway",
+                },
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TransitGatewayShare",
+          },
+          {
+            "Key": "Product",
+            "Value": "Infra",
+          },
+          {
+            "Key": "StackName",
+            "Value": "NetworkNetworking-TransitGatewayStack",
+          },
+          {
+            "Key": "Stage",
+            "Value": "Networking",
+          },
+        ],
+      },
+      "Type": "AWS::RAM::ResourceShare",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

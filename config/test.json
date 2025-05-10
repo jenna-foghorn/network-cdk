@@ -1,0 +1,36 @@
+{
+  "Project": {
+    "Name": "Networking",
+    "Stage": "Testing",
+    "Product": "APM",
+    "Region": "us-east-1",
+    "Account": "111111111111"
+  },
+  "Stack": {
+    "transitGateway": {
+      "name": "TestTransitGateway",
+      "amazonSideAsn": 64512,
+      "autoAcceptSharedAttachments": "enable",
+      "defaultRouteTableAssociation": "enable",
+      "defaultRouteTablePropagation": "enable",
+      "vpnEcmpSupport": "enable",
+      "dnsSupport": "enable",
+      "multicastSupport": "disable",
+      "vpcAttachments": [
+        {
+          "name": "VpcA-Attachment",
+          "vpcId": "vpc-abc123",
+          "subnetIds": ["subnet-xyz456", "subnet-xyz789"]
+        }
+      ]
+    },
+    "transitGatewayId": "tgw-1234567890abcdef",
+    "vpcAttachments": [
+      {
+        "name": "VpcB-Attachment",
+        "vpcId": "vpc-def456",
+        "subnetIds": ["subnet-mno789", "subnet-pqr123"]
+      }
+    ]
+  }
+}

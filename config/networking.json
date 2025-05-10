@@ -1,0 +1,20 @@
+{
+  "Project": {
+    "Name": "Network",
+    "Stage": "Networking",
+    "Product": "Infra",
+    "Region": "us-east-1",
+    "Account": "179783686247"
+  },
+  "Stack": {
+    "vpc": {
+      "Name": "NetworkingVpc",
+      "useExistingVpc": true,
+      "vpcId": "vpc-002dc66fa58d4ee6e"
+    },
+    "transitGateway": {
+      "Name": "TransitGatewayStack",
+      "sharedWithAccounts": ["471112773706"]
+    }
+  }
+}

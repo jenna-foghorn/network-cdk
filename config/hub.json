@@ -1,0 +1,36 @@
+{
+  "Project": {
+    "Name": "Networking",
+    "Stage": "Staging",
+    "Product": "APM",
+    "Region": "us-east-1",
+    "Account": "111111111111"
+  },
+  "Stack": {
+    "transitGateway": {
+      "Name": "transitGateway",
+      "name": "transitGateway",
+      "amazonSideAsn": 64512,
+      "autoAcceptSharedAttachments": "enable",
+      "defaultRouteTableAssociation": "enable",
+      "defaultRouteTablePropagation": "enable",
+      "vpnEcmpSupport": "enable",
+      "dnsSupport": "enable",
+      "multicastSupport": "disable",
+      "vpcAttachments": [
+        {
+          "name": "VpcA-Attachment",
+          "vpcId": "vpc-abc123",
+          "subnetIds": ["subnet-xyz456", "subnet-xyz789"],
+          "associateWithRouteTable": true
+        }
+      ],
+      "routeTables": [
+        {
+          "name": "HubRouteTable"
+        }
+      ],
+      "sharedWithAccounts": ["222222222222", "333333333333"]
+    }
+  }
+}
